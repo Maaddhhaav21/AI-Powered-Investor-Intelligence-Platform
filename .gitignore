@@ -1,0 +1,127 @@
+# ==========================
+# Python
+# ==========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+.venv/
+venv/
+env/
+ENV/
+
+# ==========================
+# Environment Variables
+# ==========================
+.env
+.env.*
+!.env.example
+
+# ==========================
+# IDE
+# ==========================
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# ==========================
+# Logs
+# ==========================
+*.log
+logs/
+
+# ==========================
+# Testing
+# ==========================
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# ==========================
+# Build
+# ==========================
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ==========================
+# Jupyter
+# ==========================
+.ipynb_checkpoints/
+
+# ==========================
+# ChromaDB
+# ==========================
+chroma_db/
+
+# ==========================
+# Uploaded Data
+# ==========================
+data/raw_pdfs/
+data/markdown/
+data/cleaned_markdown/
+data/chunks/
+data/reports/
+
+# Keep folder structure
+!data/raw_pdfs/.gitkeep
+!data/markdown/.gitkeep
+!data/cleaned_markdown/.gitkeep
+!data/chunks/.gitkeep
+!data/reports/.gitkeep
+
+# ==========================
+# Database
+# ==========================
+*.db
+*.sqlite
+*.sqlite3
+
+# PostgreSQL dumps
+*.sql
+
+# ==========================
+# Cached Embeddings
+# ==========================
+*.faiss
+*.pkl
+*.pickle
+*.npy
+
+# ==========================
+# Temporary Files
+# ==========================
+tmp/
+temp/
+.cache/
+
+# ==========================
+# Generated Reports
+# ==========================
+*.pdf
+!README.pdf
+
+# ==========================
+# Secrets
+# ==========================
+*.pem
+*.key
+*.crt
+*.p12
+
+# ==========================
+# uv
+# ==========================
+.uv/
+
+# ==========================
+# OS Files
+# ==========================
+Thumbs.db
+desktop.ini
