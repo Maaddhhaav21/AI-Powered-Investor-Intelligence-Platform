@@ -1,14 +1,72 @@
-pymupdf4llm>=0.0.20
-langchain>=0.3.0
-langchain-experimental>=0.3.0
-langchain-openai>=0.3.0
-openai>=1.100.0
-azure-search-documents>=11.6.0
+# ==========================
+# FastAPI
+# ==========================
+fastapi
+uvicorn[standard]
+python-multipart
+jinja2
 
-psycopg2-binary>=2.9.10
-sqlalchemy>=2.0.40
+# ==========================
+# Environment Variables
+# ==========================
+python-dotenv
 
-fastapi>=0.116.0
-uvicorn[standard]>=0.35.0
-python-multipart>=0.0.20
-jinja2>=3.1.6
+# ==========================
+# LangChain
+# ==========================
+langchain
+langchain-core
+langchain-community
+langchain-openai
+langchain-text-splitters
+
+# ==========================
+# OpenAI
+# ==========================
+openai
+tiktoken
+
+# ==========================
+# PDF Processing
+# ==========================
+pymupdf
+pymupdf4llm
+
+# ==========================
+# Vector Database
+# ==========================
+chromadb
+
+# ==========================
+# Embeddings
+# ==========================
+sentence-transformers
+
+# ==========================
+# Database
+# ==========================
+sqlalchemy
+psycopg2-binary
+
+# ==========================
+# Data Validation
+# ==========================
+pydantic
+pydantic-settings
+
+# ==========================
+# Data Processing
+# ==========================
+pandas
+numpy
+
+# ==========================
+# Utilities
+# ==========================
+tqdm
+httpx
+
+# ==========================
+# Logging
+# ==========================
+loguru
