@@ -4,6 +4,13 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    """
+    Application configuration loaded from .env
+    """
+
+    # ------------------------
+    # OpenAI
+    # ------------------------
 
     OPENAI_API_KEY: str
 
@@ -11,7 +18,25 @@ class Settings(BaseSettings):
 
     EMBEDDING_MODEL: str
 
+    # ------------------------
+    # Chroma
+    # ------------------------
+
     CHROMA_COLLECTION: str
+
+    # ------------------------
+    # FastAPI
+    # ------------------------
+
+    API_HOST: str = "127.0.0.1"
+
+    API_PORT: int = 8000
+
+    # ------------------------
+    # Logging
+    # ------------------------
+
+    LOG_LEVEL: str = "INFO"
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -21,6 +46,9 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
+# ============================================================
+# Project Paths
+# ============================================================
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
@@ -36,24 +64,18 @@ REPORT_DIR = DATA_DIR / "reports"
 
 CHROMA_DB_DIR = PROJECT_ROOT / "chroma_db"
 
+# ============================================================
+# Create folders automatically
+# ============================================================
+
 for directory in [
-
     RAW_PDF_DIR,
-
     MARKDOWN_DIR,
-
     CHUNK_DIR,
-
     REPORT_DIR,
-
     CHROMA_DB_DIR,
-
 ]:
-
     directory.mkdir(
-
         parents=True,
-
         exist_ok=True,
-
     )

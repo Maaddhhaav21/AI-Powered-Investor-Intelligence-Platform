@@ -5,17 +5,19 @@ from app.core.config import settings
 
 class EmbeddingGenerator:
     """
-    Creates the embedding model used throughout
-    the application.
+    Creates and provides the embedding model.
     """
 
     def __init__(self):
 
-        self.model = OpenAIEmbeddings(
+        self._embedding_model = OpenAIEmbeddings(
             model=settings.EMBEDDING_MODEL,
             api_key=settings.OPENAI_API_KEY,
         )
 
-    def get_model(self):
-
-        return self.model
+    @property
+    def model(self):
+        """
+        Returns the embedding model.
+        """
+        return self._embedding_model

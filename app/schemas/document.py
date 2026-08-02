@@ -1,19 +1,34 @@
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class DocumentChunk(BaseModel):
     """
-    Represents one chunk of a document.
+    Represents a single chunk extracted from a document.
     """
 
-    chunk_id: int
+    chunk_id: int = Field(
+        ...,
+        description="Chunk number inside the document."
+    )
 
-    document_name: str
+    document_name: str = Field(
+        ...,
+        description="Original document name."
+    )
 
-    content: str
+    content: str = Field(
+        ...,
+        description="Chunk content."
+    )
 
-    character_count: int
+    character_count: int = Field(
+        ...,
+        description="Number of characters in the chunk."
+    )
 
-    embedding_id: Optional[str] = None
+    embedding_id: Optional[str] = Field(
+        default=None,
+        description="Vector database identifier."
+    )
