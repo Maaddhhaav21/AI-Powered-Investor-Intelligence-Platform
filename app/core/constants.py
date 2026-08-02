@@ -1,0 +1,5 @@
+SUPPORTED_FILE_TYPES = [".pdf"]
+
+MARKDOWN_EXTENSION = ".md"
+
+UTF8 = "utf-8"
