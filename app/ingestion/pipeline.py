@@ -1,7 +1,9 @@
 from pathlib import Path
 
-from app.core.config import MARKDOWN_DIR, CHUNK_DIR
+import json
+
 from app.core.logger import logger
+from app.core.config import MARKDOWN_DIR, CHUNK_DIR
 
 from app.ingestion.pdf_loader import PDFLoader
 from app.ingestion.markdown_converter import MarkdownConverter
@@ -9,7 +11,7 @@ from app.ingestion.markdown_cleaner import MarkdownCleaner
 from app.ingestion.metadata_extractor import MetadataExtractor
 
 from app.processing.chunker import Chunker
-from app.processing.indexer import ChunkIndexer
+from app.processing.vector_store import VectorStore
 
 
 class IngestionPipeline:
@@ -17,94 +19,89 @@ class IngestionPipeline:
     def __init__(self):
 
         self.converter = MarkdownConverter()
+
         self.cleaner = MarkdownCleaner()
+
         self.metadata = MetadataExtractor()
 
         self.chunker = Chunker()
-        self.indexer = ChunkIndexer()
+
+        self.vector_store = VectorStore()
 
     def ingest(self, pdf_path: Path):
-
-        # --------------------------------------------------
-        # Step 1 : Validate PDF
-        # --------------------------------------------------
 
         loader = PDFLoader(pdf_path)
 
         pdf_path = loader.load()
 
-        logger.info("PDF validated successfully.")
-
-        # --------------------------------------------------
-        # Step 2 : Convert PDF -> Markdown
-        # --------------------------------------------------
-
-        logger.info("Converting PDF to Markdown...")
+        logger.info("PDF validated.")
 
         markdown = self.converter.convert(pdf_path)
 
-        logger.success("Markdown conversion completed.")
+        logger.success("Markdown generated.")
 
-        # --------------------------------------------------
-        # Step 3 : Clean Markdown
-        # --------------------------------------------------
+        markdown = self.cleaner.clean(markdown)
 
-        logger.info("Cleaning Markdown...")
+        logger.success("Markdown cleaned.")
 
-        clean_markdown = self.cleaner.clean(markdown)
-
-        logger.success("Markdown cleaned successfully.")
-
-        # --------------------------------------------------
-        # Step 4 : Save Markdown
-        # --------------------------------------------------
-
-        markdown_output_path = MARKDOWN_DIR / f"{pdf_path.stem}.md"
+        markdown_path = MARKDOWN_DIR / f"{pdf_path.stem}.md"
 
         self.converter.save(
-            clean_markdown,
-            markdown_output_path,
+
+            markdown,
+
+            markdown_path,
+
         )
 
-        logger.success(
-            f"Markdown saved to {markdown_output_path}"
-        )
-
-        # --------------------------------------------------
-        # Step 5 : Chunk Markdown
-        # --------------------------------------------------
-
-        logger.info("Creating chunks...")
+        logger.success("Markdown saved.")
 
         chunks = self.chunker.chunk_document(
-            markdown_output_path
+
+            markdown_path
+
         )
 
         logger.success(
+
             f"{len(chunks)} chunks created."
+
         )
 
-        # --------------------------------------------------
-        # Step 6 : Save Chunks
-        # --------------------------------------------------
+        chunk_json = CHUNK_DIR / f"{pdf_path.stem}.json"
 
-        chunk_output_path = CHUNK_DIR / f"{pdf_path.stem}.json"
+        chunk_json.write_text(
 
-        self.indexer.save(
-            chunks,
-            chunk_output_path,
+            json.dumps(
+
+                [
+
+                    chunk.model_dump()
+
+                    for chunk in chunks
+
+                ],
+
+                indent=4,
+
+            ),
+
+            encoding="utf-8",
+
         )
 
-        logger.success(
-            f"Chunks saved to {chunk_output_path}"
+        logger.success("Chunk JSON saved.")
+
+        self.vector_store.store_chunks(
+
+            chunks
+
         )
 
-        # --------------------------------------------------
-        # Step 7 : Extract Metadata
-        # --------------------------------------------------
+        logger.success("Chunks indexed into ChromaDB.")
 
         metadata = self.metadata.extract(pdf_path)
 
-        logger.success("Metadata extracted successfully.")
+        logger.success("Metadata extracted.")
 
         return metadata

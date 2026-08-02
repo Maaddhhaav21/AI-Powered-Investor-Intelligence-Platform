@@ -1,29 +1,59 @@
 from pathlib import Path
 
-# Project Root
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+
+    OPENAI_API_KEY: str
+
+    CHAT_MODEL: str
+
+    EMBEDDING_MODEL: str
+
+    CHROMA_COLLECTION: str
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore",
+    )
+
+
+settings = Settings()
+
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
-# Data Folder
 DATA_DIR = PROJECT_ROOT / "data"
 
-# Storage Directories
 RAW_PDF_DIR = DATA_DIR / "raw_pdfs"
+
 MARKDOWN_DIR = DATA_DIR / "markdown"
-CLEANED_MARKDOWN_DIR = DATA_DIR / "cleaned_markdown"
 
 CHUNK_DIR = DATA_DIR / "chunks"
 
-CHUNK_DIR.mkdir(
+REPORT_DIR = DATA_DIR / "reports"
 
-    parents=True,
+CHROMA_DB_DIR = PROJECT_ROOT / "chroma_db"
 
-    exist_ok=True
-
-)
-# Automatically create directories
 for directory in [
+
     RAW_PDF_DIR,
+
     MARKDOWN_DIR,
-    CLEANED_MARKDOWN_DIR,
+
+    CHUNK_DIR,
+
+    REPORT_DIR,
+
+    CHROMA_DB_DIR,
+
 ]:
-    directory.mkdir(parents=True, exist_ok=True)
+
+    directory.mkdir(
+
+        parents=True,
+
+        exist_ok=True,
+
+    )
