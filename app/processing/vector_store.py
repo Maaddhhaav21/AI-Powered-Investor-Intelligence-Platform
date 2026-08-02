@@ -70,3 +70,20 @@ class VectorStore:
             ids=ids,
 
         )
+    def similarity_search(
+
+        self,
+
+        query: str,
+
+        k: int = 5,
+
+    ):
+
+        return self.db.similarity_search(
+
+            query,
+
+            k=k,
+
+        )
