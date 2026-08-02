@@ -11,6 +11,15 @@ RAW_PDF_DIR = DATA_DIR / "raw_pdfs"
 MARKDOWN_DIR = DATA_DIR / "markdown"
 CLEANED_MARKDOWN_DIR = DATA_DIR / "cleaned_markdown"
 
+CHUNK_DIR = DATA_DIR / "chunks"
+
+CHUNK_DIR.mkdir(
+
+    parents=True,
+
+    exist_ok=True
+
+)
 # Automatically create directories
 for directory in [
     RAW_PDF_DIR,
