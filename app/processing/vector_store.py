@@ -70,12 +70,17 @@ class VectorStore:
         k: int = 5,
     ):
         """
-        Returns the k most similar chunks.
+        Perform Max Marginal Relevance (MMR) search.
+
+        MMR returns relevant but diverse chunks,
+        reducing duplicate context.
         """
 
-        return self._collection.similarity_search(
+        return self._collection.max_marginal_relevance_search(
             query=query,
             k=k,
+            fetch_k=max(20, k * 4),
+            lambda_mult=0.5,
         )
 
     def delete_document(
@@ -101,7 +106,7 @@ class VectorStore:
 
     def count(self) -> int:
         """
-        Returns number of stored vectors.
+        Returns the total number of vectors stored.
         """
 
         return self._collection._collection.count()
