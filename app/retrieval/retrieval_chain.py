@@ -1,3 +1,5 @@
+from typing import List
+
 from app.retrieval.retriever import Retriever
 
 
@@ -11,17 +13,12 @@ class RetrievalChain:
         self.retriever = Retriever()
 
     def invoke(
-
         self,
-
         question: str,
+        top_k: int = 5,
+    ) -> List:
 
-    ):
-
-        documents = self.retriever.retrieve(
-
-            question
-
+        return self.retriever.retrieve(
+            query=question,
+            top_k=top_k,
         )
-
-        return documents

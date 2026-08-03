@@ -1,19 +1,41 @@
 from app.retrieval.retrieval_chain import RetrievalChain
 
-chain = RetrievalChain()
 
-documents = chain.invoke(
+def main():
 
-    "What was Apple's revenue?"
+    chain = RetrievalChain()
 
-)
+    results = chain.invoke(
 
-print()
+        question="What was Apple's revenue?",
 
-for doc in documents:
+        top_k=5,
 
-    print("=" * 80)
+    )
 
-    print(doc.page_content[:500])
+    print("\n")
 
-    print()
+    print("=" * 100)
+
+    print("Retrieved Chunks")
+
+    print("=" * 100)
+
+    for index, document in enumerate(results, start=1):
+
+        print(f"\nChunk {index}")
+
+        print("-" * 80)
+
+        print(document.page_content[:700])
+
+        print()
+
+        print(document.metadata)
+
+        print()
+
+
+if __name__ == "__main__":
+
+    main()
