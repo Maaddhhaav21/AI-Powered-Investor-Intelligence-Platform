@@ -17,12 +17,16 @@ class VectorStore:
     """
 
     def __init__(self):
+        self.embedding_model = EmbeddingGenerator().model
+        self._connect()
 
-        embedding_model = EmbeddingGenerator().model
-
+    def _connect(self):
+        """
+        Reconnect to the Chroma collection.
+        """
         self._collection = Chroma(
             collection_name=settings.CHROMA_COLLECTION,
-            embedding_function=embedding_model,
+            embedding_function=self.embedding_model,
             persist_directory=str(CHROMA_DB_DIR),
         )
 
@@ -31,23 +35,32 @@ class VectorStore:
         chunks: List[DocumentChunk],
     ) -> None:
         """
-        Store chunks inside ChromaDB.
+        Replace the existing collection with the newly uploaded report.
         """
+
+        print("Removing previous document embeddings...")
+
+        try:
+            self._collection.delete_collection()
+        except Exception:
+            pass
+
+        # IMPORTANT:
+        # recreate the collection after deleting it
+        self._connect()
+
+        print("Previous embeddings removed.")
 
         ids = []
         texts = []
         metadatas = []
 
         for chunk in chunks:
-
-            vector_id = (
-                f"{chunk.document_name}_chunk_{chunk.chunk_id}"
-            )
+            vector_id = f"{chunk.document_name}_chunk_{chunk.chunk_id}"
 
             chunk.embedding_id = vector_id
 
             ids.append(vector_id)
-
             texts.append(chunk.content)
 
             metadatas.append(
@@ -64,17 +77,19 @@ class VectorStore:
             ids=ids,
         )
 
+        print("Embeddings stored.")
+
     def similarity_search(
         self,
         query: str,
         k: int = 5,
     ):
         """
-        Perform Max Marginal Relevance (MMR) search.
-
-        MMR returns relevant but diverse chunks,
-        reducing duplicate context.
+        Perform Max Marginal Relevance search.
         """
+
+        # reconnect if collection was deleted
+        self._connect()
 
         return self._collection.max_marginal_relevance_search(
             query=query,
@@ -87,26 +102,20 @@ class VectorStore:
         self,
         document_name: str,
     ) -> None:
-        """
-        Delete all chunks belonging to a document.
-        """
-
         self._collection.delete(
             where={
                 "document_name": document_name,
             }
         )
 
-    def reset(self) -> None:
-        """
-        Delete the complete collection.
-        """
+    def reset(self):
+        try:
+            self._collection.delete_collection()
+        except Exception:
+            pass
 
-        self._collection.reset_collection()
+        self._connect()
 
-    def count(self) -> int:
-        """
-        Returns the total number of vectors stored.
-        """
-
+    def count(self):
+        self._connect()
         return self._collection._collection.count()

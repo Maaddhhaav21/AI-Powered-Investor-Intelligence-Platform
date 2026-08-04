@@ -124,7 +124,17 @@ class IngestionPipeline:
         logger.success("Chunk JSON saved.")
 
         # -----------------------------------------------------
-        # Store in ChromaDB
+        # RESET CHROMADB
+        # -----------------------------------------------------
+
+        logger.info("Removing previous document embeddings...")
+
+        self.vector_store.reset()
+
+        logger.success("Previous embeddings removed.")
+
+        # -----------------------------------------------------
+        # Store New Chunks
         # -----------------------------------------------------
 
         self.vector_store.add_chunks(
