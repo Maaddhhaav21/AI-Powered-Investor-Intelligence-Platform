@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 30% 11%;
+    --surface: 220 24% 98%;
+    --surface-2: 220 20% 95%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 30% 11%;
+    --border: 220 16% 90%;
+    --input: 220 16% 88%;
+    --ring: 217 91% 60%;
+    --muted: 220 20% 95%;
+    --muted-foreground: 220 10% 42%;
+
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+    --accent: 199 89% 64%;
+    --accent-foreground: 222 30% 11%;
+    --success: 160 84% 33%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 45%;
+    --warning-foreground: 0 0% 100%;
+    --danger: 0 72% 51%;
+    --danger-foreground: 0 0% 100%;
+  }
+
+  .dark {
+    --background: 224 28% 6%;
+    --foreground: 210 30% 96%;
+    --surface: 222 26% 8.5%;
+    --surface-2: 222 22% 12%;
+    --card: 222 24% 9%;
+    --card-foreground: 210 30% 96%;
+    --border: 222 18% 17%;
+    --input: 222 18% 19%;
+    --ring: 217 91% 60%;
+    --muted: 222 20% 14%;
+    --muted-foreground: 217 12% 62%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 30% 8%;
+    --accent: 199 89% 64%;
+    --accent-foreground: 222 30% 8%;
+    --success: 160 74% 45%;
+    --success-foreground: 222 30% 8%;
+    --warning: 38 92% 55%;
+    --warning-foreground: 222 30% 8%;
+    --danger: 0 84% 65%;
+    --danger-foreground: 222 30% 8%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    @apply bg-primary/25 text-foreground;
+  }
+
+  /* thin scrollbars, in keeping with terminal/dashboard aesthetics */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-surface/70 backdrop-blur-xl backdrop-saturate-150;
+  }
+  .skeleton {
+    @apply relative overflow-hidden bg-muted;
+  }
+  .skeleton::after {
+    content: "";
+    @apply absolute inset-0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--foreground) / 0.06),
+      transparent
+    );
+    animation: shimmer 1.8s infinite;
+    background-size: 1000px 100%;
+  }
+  .mono-tabular {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}

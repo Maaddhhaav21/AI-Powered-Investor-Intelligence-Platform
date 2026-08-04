@@ -1,5 +1,6 @@
 from pathlib import Path
 import shutil
+from app.services.report_registry import ReportRegistry
 
 from fastapi import (
     APIRouter,
@@ -44,12 +45,15 @@ async def upload_pdf(
         Path(destination)
     )
 
+    metadata["pdf_path"] = str(destination)
+
+    registry = ReportRegistry()
+
+    report = registry.add(
+        file.filename,
+        metadata,
+    )
+
     return {
-
-        "message": "Document uploaded successfully.",
-
-        "filename": file.filename,
-
-        "metadata": metadata,
-
+        "report": report
     }

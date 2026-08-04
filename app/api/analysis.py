@@ -21,19 +21,35 @@ investment_service = InvestmentReportService()
 @router.get("/summary")
 def summary():
 
-    return summary_service.generate_summary()
+    result = summary_service.generate_summary()
+
+    return {
+        "reportId": "latest",
+        "generatedAt": "",
+        "markdown": result["answer"],
+    }
 
 
 @router.get("/financial-analysis")
 def financial_analysis():
 
-    return financial_service.analyze_financials()
+    result = financial_service.analyze_financials()
+
+    return {
+        "reportId": "latest",
+        "markdown": result["answer"],
+    }
 
 
 @router.get("/risk-analysis")
 def risk_analysis():
 
-    return risk_service.analyze_risks()
+    result = risk_service.analyze_risks()
+
+    return {
+        "reportId": "latest",
+        "markdown": result["answer"],
+    }
 
 
 @router.get("/metrics")
@@ -45,10 +61,10 @@ def metrics():
 @router.get("/investment-report")
 def investment_report():
 
-    report = investment_service.generate_report()
+    result = investment_service.generate_report()
 
     return {
-
-        "report": report
-
+        "reportId": "latest",
+        "generatedAt": "",
+        "markdown": result["answer"],
     }
