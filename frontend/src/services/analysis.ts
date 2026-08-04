@@ -1,37 +1,31 @@
 import { api } from "./api";
-import type {
-  ExecutiveSummary,
-  FinancialAnalysis,
-  InvestmentReport,
-  MetricsResponse,
-  RiskAnalysis,
-} from "@/types/analysis";
 
-export async function getExecutiveSummary(): Promise<ExecutiveSummary> {
-  const { data } = await api.get<ExecutiveSummary>("/analysis/summary");
+export interface AIResponse {
+  answer: string;
+  sources: any[];
+}
+
+export async function getExecutiveSummary(): Promise<AIResponse> {
+  const { data } = await api.get<AIResponse>("/analysis/summary");
   return data;
 }
 
-export async function getFinancialAnalysis(): Promise<FinancialAnalysis> {
-  const { data } = await api.get<FinancialAnalysis>(
-    "/analysis/financial-analysis",
-  );
+export async function getFinancialAnalysis(): Promise<AIResponse> {
+  const { data } = await api.get<AIResponse>("/analysis/financial-analysis");
   return data;
 }
 
-export async function getRiskAnalysis(): Promise<RiskAnalysis> {
-  const { data } = await api.get<RiskAnalysis>("/analysis/risk-analysis");
+export async function getRiskAnalysis(): Promise<AIResponse> {
+  const { data } = await api.get<AIResponse>("/analysis/risk-analysis");
   return data;
 }
 
-export async function getMetrics(): Promise<MetricsResponse> {
-  const { data } = await api.get<MetricsResponse>("/analysis/metrics");
+export async function getMetrics(): Promise<AIResponse> {
+  const { data } = await api.get<AIResponse>("/analysis/metrics");
   return data;
 }
 
-export async function getInvestmentReport(): Promise<InvestmentReport> {
-  const { data } = await api.get<InvestmentReport>(
-    "/analysis/investment-report",
-  );
+export async function getInvestmentReport(): Promise<AIResponse> {
+  const { data } = await api.get<AIResponse>("/analysis/investment-report");
   return data;
 }
