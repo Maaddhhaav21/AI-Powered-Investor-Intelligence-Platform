@@ -21,13 +21,16 @@ interface ReportViewerProps {
   toc?: TocItem[];
   onRegenerate?: () => void;
   showPrint?: boolean;
-  badge?: { label: string; variant?: "default" | "success" | "warning" | "danger" };
+  badge?: {
+    label: string;
+    variant?: "default" | "success" | "warning" | "danger";
+  };
 }
 
 export function ReportViewer({
   title,
   markdown,
-  isLoading,
+  isLoading = false,
   toc,
   onRegenerate,
   showPrint,
@@ -37,19 +40,31 @@ export function ReportViewer({
 
   const handleCopy = async () => {
     if (!markdown) return;
+
     await navigator.clipboard.writeText(markdown);
     setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 1500);
   };
 
   const handleDownload = () => {
     if (!markdown) return;
-    const blob = new Blob([markdown], { type: "text/markdown" });
+
+    const blob = new Blob([markdown], {
+      type: "text/markdown",
+    });
+
     const url = URL.createObjectURL(blob);
+
     const a = document.createElement("a");
+
     a.href = url;
     a.download = `${(title ?? "report").toLowerCase().replace(/\s+/g, "-")}.md`;
+
     a.click();
+
     URL.revokeObjectURL(url);
   };
 
@@ -59,36 +74,63 @@ export function ReportViewer({
         <CardContent className="p-6 md:p-8">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4">
             <div className="flex items-center gap-2">
-              {title && <h2 className="text-lg font-semibold text-foreground">{title}</h2>}
+              {title && (
+                <h2 className="text-lg font-semibold text-foreground">
+                  {title}
+                </h2>
+              )}
+
               {badge && <Badge variant={badge.variant}>{badge.label}</Badge>}
             </div>
-            <div className="flex items-center gap-1.5">
-              <Button variant="outline" size="sm" onClick={handleCopy} disabled={!markdown}>
-                {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleCopy}
+                disabled={!markdown}
+              >
+                {copied ? (
+                  <Check className="h-4 w-4" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
                 {copied ? "Copied" : "Copy"}
               </Button>
-              <Button variant="outline" size="sm" onClick={handleDownload} disabled={!markdown}>
-                <Download className="h-3.5 w-3.5" />
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleDownload}
+                disabled={!markdown}
+              >
+                <Download className="h-4 w-4" />
                 Markdown
               </Button>
+
               {showPrint && (
-                <Button variant="outline" size="sm" onClick={() => window.print()}>
-                  <Printer className="h-3.5 w-3.5" />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.print()}
+                >
+                  <Printer className="h-4 w-4" />
                   Print
                 </Button>
               )}
+
               {onRegenerate && (
-                <Button variant="subtle" size="sm" onClick={onRegenerate}>
-                  <RefreshCw className="h-3.5 w-3.5" />
+                <Button variant="outline" size="sm" onClick={onRegenerate}>
+                  <RefreshCw className="h-4 w-4" />
                   Regenerate
                 </Button>
               )}
             </div>
           </div>
 
-          {isLoading || !markdown ? (
+          {isLoading ? (
             <DocumentSkeleton />
-          ) : (
+          ) : markdown ? (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -96,6 +138,27 @@ export function ReportViewer({
             >
               <MarkdownViewer content={markdown} />
             </motion.div>
+          ) : (
+            <div className="rounded-xl border border-red-500/40 bg-red-500/5 p-8 text-center">
+              <h3 className="text-lg font-semibold text-red-400">
+                No report generated
+              </h3>
+
+              <p className="mt-2 text-sm text-muted-foreground">
+                The backend returned no markdown for this page.
+              </p>
+
+              {onRegenerate && (
+                <Button
+                  className="mt-5"
+                  variant="outline"
+                  onClick={onRegenerate}
+                >
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Try Again
+                </Button>
+              )}
+            </div>
           )}
         </CardContent>
       </Card>
@@ -106,6 +169,7 @@ export function ReportViewer({
             <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               On this page
             </p>
+
             <nav className="space-y-1">
               {toc.map((item) => (
                 <a
@@ -113,7 +177,7 @@ export function ReportViewer({
                   href={`#${item.id}`}
                   className={cn(
                     "block truncate rounded-md px-2 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground",
-                    item.level > 1 && "pl-4"
+                    item.level > 1 && "pl-4",
                   )}
                 >
                   {item.title}

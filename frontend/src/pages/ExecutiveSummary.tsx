@@ -19,7 +19,7 @@ export function ExecutiveSummary() {
       ) : (
         <ReportViewer
           title="Executive Summary"
-          markdown={data?.answer}
+          markdown={data?.markdown}
           isLoading={isLoading}
           onRegenerate={() => refetch()}
           badge={{

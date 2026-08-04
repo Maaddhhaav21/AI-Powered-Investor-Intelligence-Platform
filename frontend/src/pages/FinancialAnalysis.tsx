@@ -19,7 +19,7 @@ export function FinancialAnalysis() {
       ) : (
         <ReportViewer
           title="Financial Analysis"
-          markdown={data?.answer}
+          markdown={data?.markdown}
           isLoading={isLoading}
           onRegenerate={() => refetch()}
           badge={{

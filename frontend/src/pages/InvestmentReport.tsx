@@ -6,6 +6,8 @@ import { useInvestmentReport } from "@/hooks/useAnalysis";
 export function InvestmentReport() {
   const { data, isLoading, isError, refetch } = useInvestmentReport();
 
+  console.log("Investment Report Response:", data);
+
   return (
     <div>
       <PageHeader
@@ -19,9 +21,9 @@ export function InvestmentReport() {
       ) : (
         <ReportViewer
           title="Investment Report"
-          markdown={data?.answer}
+          markdown={data?.markdown ?? ""}
           isLoading={isLoading}
-          showPrint
+          showPrint={true}
           onRegenerate={() => refetch()}
           badge={{
             label: "AI Generated",

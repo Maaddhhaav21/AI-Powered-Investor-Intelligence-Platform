@@ -1,31 +1,30 @@
 import { api } from "./api";
 
-export interface AIResponse {
-  answer: string;
-  sources: any[];
+export interface MarkdownResponse {
+  markdown: string;
 }
 
-export async function getExecutiveSummary(): Promise<AIResponse> {
-  const { data } = await api.get<AIResponse>("/analysis/summary");
+export async function getExecutiveSummary(): Promise<MarkdownResponse> {
+  const { data } = await api.get("/analysis/summary");
   return data;
 }
 
-export async function getFinancialAnalysis(): Promise<AIResponse> {
-  const { data } = await api.get<AIResponse>("/analysis/financial-analysis");
+export async function getFinancialAnalysis(): Promise<MarkdownResponse> {
+  const { data } = await api.get("/analysis/financial-analysis");
   return data;
 }
 
-export async function getRiskAnalysis(): Promise<AIResponse> {
-  const { data } = await api.get<AIResponse>("/analysis/risk-analysis");
+export async function getRiskAnalysis(): Promise<MarkdownResponse> {
+  const { data } = await api.get("/analysis/risk-analysis");
   return data;
 }
 
-export async function getMetrics(): Promise<AIResponse> {
-  const { data } = await api.get<AIResponse>("/analysis/metrics");
+export async function getMetrics(): Promise<MarkdownResponse> {
+  const { data } = await api.get("/analysis/metrics");
   return data;
 }
 
-export async function getInvestmentReport(): Promise<AIResponse> {
-  const { data } = await api.get<AIResponse>("/analysis/investment-report");
+export async function getInvestmentReport(): Promise<MarkdownResponse> {
+  const { data } = await api.get("/analysis/investment-report");
   return data;
 }

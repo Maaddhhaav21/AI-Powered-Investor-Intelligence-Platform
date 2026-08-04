@@ -35,6 +35,12 @@ def risk_analysis():
     result = risk_service.analyze_risks()
     return {"markdown": result["answer"]}
 
+@router.get("/metrics")
+def metrics():
+    result = metrics_service.extract_metrics()
+    return {
+        "markdown": result["answer"]
+    }
 
 @router.get("/investment-report")
 def investment_report():

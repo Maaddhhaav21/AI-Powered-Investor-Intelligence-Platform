@@ -19,7 +19,7 @@ export function RiskAnalysis() {
       ) : (
         <ReportViewer
           title="Risk Analysis"
-          markdown={data?.answer}
+          markdown={data?.markdown}
           isLoading={isLoading}
           onRegenerate={() => refetch()}
           badge={{
